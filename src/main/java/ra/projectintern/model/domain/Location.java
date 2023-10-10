@@ -1,9 +1,7 @@
 package ra.projectintern.model.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -22,8 +20,18 @@ public class Location {
     private String name;
     private String address;
     private String type;
+
     private float price;
-    private String imageUrl;
+
+    private String main_image;
+
+    private String title;
+    private String description;
+
+    @JsonIgnore
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "location", cascade = CascadeType.ALL)
+    private List<ImageLocation> images;
+
     private boolean status;
 
     @ManyToOne
@@ -36,8 +44,8 @@ public class Location {
     @OneToMany(mappedBy = "location", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Favourite> favourites;
 
-    @OneToMany(mappedBy = "location", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Booking> bookings;
+//    @OneToMany(mappedBy = "location", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+//    private List<Booking> bookings;
 
 
     @ManyToMany
@@ -46,7 +54,7 @@ public class Location {
 
     @ManyToMany
 //            (mappedBy = "locations")
-    private List<Service> services;
+    private List<Convenient> convenients;
 
 
 }

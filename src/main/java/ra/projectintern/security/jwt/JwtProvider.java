@@ -25,8 +25,10 @@ import java.util.stream.Collectors;
 
 @Component
 public class JwtProvider {
+
     @Autowired
     private UserDetailService userDetailService;
+
     public final Logger logger = LoggerFactory.getLogger(JwtEntryPoint.class);
     @Value("${jwt.secret-key}")
     private String SECRET;
@@ -41,7 +43,6 @@ public class JwtProvider {
                 .setSubject(userPrinciple.getUsername()) // set chủ đề
                 .setIssuedAt(new Date()) // Thời gian bắt đầu
                 .setExpiration(new Date(new Date().getTime() + REFRESHEXPIRED))// thời gian kết thúc
-                // custom access key vs reset key
                 .signWith(SignatureAlgorithm.HS512, SECRET) // chuwx kí và thuật toán mã hóa , chuỗi bí mật
                 .compact();
     }
@@ -55,7 +56,7 @@ public class JwtProvider {
 
                 UserPrinciple userPrinciple = (UserPrinciple) userDetailService.loadUserByUsername(username);
 
-//            Kiem tra refresh token con valid hay ko 
+//            Kiem tra refresh token con valid hay ko
 //            Tao moi access_token
                 if (isTokenValid(refresh_token, userPrinciple) && !isTokenExpired(refresh_token)) {
                     String access_token = generateToken(userPrinciple);
@@ -111,6 +112,7 @@ public class JwtProvider {
             return true;
         }
     }
+
 
 //    End voi Refresh Token
 

@@ -20,6 +20,6 @@ public class PaymentMethod {
     private String name;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY,mappedBy = "paymentMethod")
-    private List<OrderItem> orderItems;
+    private List<Orders> order;
 
 }

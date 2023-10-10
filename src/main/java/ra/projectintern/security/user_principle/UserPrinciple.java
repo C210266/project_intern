@@ -20,10 +20,13 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class UserPrinciple implements UserDetails {
     private Long id;
+
+    private String username;
+
     private String fullName;
     private String email;
     private String phoneNumber;
-    private String username;
+
     @JsonIgnore
     private String password;
     private boolean status;

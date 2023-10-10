@@ -4,15 +4,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.web.bind.annotation.*;
 import ra.projectintern.exception.CustomException;
+import ra.projectintern.model.domain.Users;
 import ra.projectintern.model.dto.request.FormSignInDto;
 import ra.projectintern.model.dto.request.FormSignUpDto;
 import ra.projectintern.model.dto.response.JwtResponse;
+import ra.projectintern.repository.IUserRepository;
 import ra.projectintern.security.jwt.JwtEntryPoint;
 import ra.projectintern.security.jwt.JwtProvider;
 import ra.projectintern.security.user_principle.UserPrinciple;
@@ -36,6 +40,8 @@ public class AuthController {
     @Autowired
     private JwtProvider jwtProvider;
     @Autowired
+    private IUserRepository userRepository;
+    @Autowired
     private MailService mailService;
     @Autowired
     private IUserService userService;
@@ -57,7 +63,15 @@ public class AuthController {
 
             // Tạo token và trả về cho người dùng
             String access_token = jwtProvider.generateToken(userPrinciple);
-            String refresh_token = jwtProvider.generateRefreshToken(userPrinciple);
+            String refresh_token = null;
+            Users userLogin = userService.findByUsername(userPrinciple.getUsername()).orElseThrow(() -> new CustomException("User not found"));
+            if (userLogin.getRefresh_token() == null || userLogin.getRefresh_token().isEmpty()) {
+                refresh_token = jwtProvider.generateRefreshToken(userPrinciple);
+            } else {
+                refresh_token = userLogin.getRefresh_token();
+            }
+            userLogin.setRefresh_token(refresh_token);
+            userRepository.save(userLogin);
 
             List<String> roles = userPrinciple.getAuthorities().stream()
                     .map(GrantedAuthority::getAuthority).collect(Collectors.toList());
@@ -74,13 +88,15 @@ public class AuthController {
                     .roles(roles)
                     .type("Bearer")
                     .status(userPrinciple.isStatus()).build());
-        } catch (AuthenticationException | CustomException e) {
-            throw new CustomException("Username or password is incorrect");
+        } catch (AuthenticationException e) {
+//            throw new CustomException("Username or password is incorrect");
+           e.printStackTrace();
         }
+        return null;
     }
 
     @PostMapping("/public/sign-up")
-    public ResponseEntity<String> sign_up(@RequestBody @Valid FormSignUpDto formSignUpDto) {
+    public ResponseEntity<String> sign_up(@RequestBody @Valid FormSignUpDto formSignUpDto) throws CustomException {
         mailService.sendMail(formSignUpDto.getEmail(), "Welcome", " Register successfully");
         userService.save(formSignUpDto);
         return new ResponseEntity<>("Congratulations register successfully", HttpStatus.CREATED);

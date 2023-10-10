@@ -21,7 +21,7 @@ public class UserMapper implements IGenericMapper<Users, UserRequest, UserRespon
     }
 
     @Override
-    public UserResponse toResponse(Users users) throws CustomException {
+    public UserResponse toResponse(Users users) {
         return UserResponse.builder()
                 .id(users.getId())
                 .username(users.getUsername())
@@ -30,6 +30,7 @@ public class UserMapper implements IGenericMapper<Users, UserRequest, UserRespon
                 .phoneNumber(users.getPhoneNumber())
                 .roles(users.getRoles())
                 .status(users.isStatus())
+                .refresh_token(users.getRefresh_token())
                 .build();
     }
 }

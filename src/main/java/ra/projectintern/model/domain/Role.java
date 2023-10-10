@@ -6,7 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.Set;
+
 
 
 @Entity
@@ -20,9 +20,6 @@ public class Role {
     private Long id;
     @Enumerated(EnumType.STRING)
     private RoleName roleName;
-
-    @ManyToMany
-    private Set<Users> users;
 
 
 }

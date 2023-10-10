@@ -1,19 +1,16 @@
 package ra.projectintern.model.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
-
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+
 public class Host {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,6 +19,8 @@ public class Host {
     private boolean status;
     private String phoneNumber;
 
-    @OneToMany(mappedBy = "host",cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "host", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Location> locations = new ArrayList<>();
+
+
 }

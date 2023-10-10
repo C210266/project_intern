@@ -23,6 +23,7 @@ public class UserResponse {
     @JsonIgnore
     private String password;
     private boolean status;
+    private String refresh_token;
 
 
     private Set<Role> roles = new HashSet<>();

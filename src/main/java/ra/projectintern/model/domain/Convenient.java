@@ -15,17 +15,13 @@ import java.util.Set;
 @AllArgsConstructor
 @Builder
 @Entity
-public class Service {
+public class Convenient {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "location_service",
-            joinColumns = @JoinColumn(name = "location_id"),
-            inverseJoinColumns = @JoinColumn(name = "service_id"))
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY,mappedBy ="convenients")
     private Set<Location> locations = new HashSet<>();
 
 

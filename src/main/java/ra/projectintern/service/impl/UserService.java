@@ -45,13 +45,14 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public Users save(FormSignUpDto form) {
+    public Users save(FormSignUpDto form) throws CustomException {
         if (userRepository.existsByUsername(form.getUsername())) {
-            throw new EntityExistsException("Username is exist");
+            throw new EntityExistsException("Username is exists");
         }
         if (userRepository.existsByEmail(form.getEmail())) {
-            throw new EntityExistsException("Email is exist");
+            throw new EntityExistsException("Email is exists");
         }
+        // lấy ra danh sách các quyền và chuyển thành đối tượng Users
         Set<Role> roles = new HashSet<>();
         if (form.getRoles() == null || form.getRoles().isEmpty()) {
             roles.add(roleService.findByRoleName(RoleName.ROLE_USER));
@@ -60,7 +61,7 @@ public class UserService implements IUserService {
                     role -> {
                         switch (role) {
                             case "admin":
-                                roles.add(roleService.findByRoleName(RoleName.ROlE_ADMIN));
+                                roles.add(roleService.findByRoleName(RoleName.ROLE_ADMIN));
                             case "user":
                                 roles.add(roleService.findByRoleName(RoleName.ROLE_USER));
                         }
@@ -83,4 +84,5 @@ public class UserService implements IUserService {
     public void changeStatus(Long userId) throws CustomException {
 
     }
+
 }

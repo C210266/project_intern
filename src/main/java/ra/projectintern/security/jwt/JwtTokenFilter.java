@@ -1,6 +1,7 @@
 package ra.projectintern.security.jwt;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+@Log4j2
 @RequiredArgsConstructor
 public class JwtTokenFilter extends OncePerRequestFilter {
     public final Logger logger = LoggerFactory.getLogger(JwtEntryPoint.class);
@@ -27,12 +29,12 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+        log.error(request.getServletPath());
         try {
             String token = getTokenFromRequest(request);
             if (token != null && jwtProvider.validateToken(token)) {
                 // lấy ra đối tượng userdetail thông qua userdetailservice và token
                 String username = jwtProvider.getUserNameFromToken(token);
-
                 UserDetails userDetails = userDetailService.loadUserByUsername(username);
                 if (userDetails != null) {
                     UsernamePasswordAuthenticationToken authentication =

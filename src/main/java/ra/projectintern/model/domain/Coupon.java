@@ -29,6 +29,6 @@ public class Coupon {
     private boolean status;
 
     @ManyToOne
-    @JoinColumn(name = "orderItem_id")
-    private OrderItem orderItem;
+    @JoinColumn(name = "order_id")
+    private Orders orders;
 }

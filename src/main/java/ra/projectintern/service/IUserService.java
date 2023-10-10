@@ -14,7 +14,7 @@ public interface IUserService {
 
     Optional<Users> findByEmail(String email);
 
-    Users save(FormSignUpDto form);
+    Users save(FormSignUpDto form) throws CustomException;
 
     void changeStatus(Long userId) throws CustomException;
 }

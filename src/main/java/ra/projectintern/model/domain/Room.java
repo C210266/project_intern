@@ -23,11 +23,7 @@ public class Room {
     private int quantity;
     private boolean status;
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "location_room",
-            joinColumns = @JoinColumn(name = "location_id"),
-            inverseJoinColumns = @JoinColumn(name = "room_id"))
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY,mappedBy = "rooms")
     private Set<Location> locations = new HashSet<>();
 
 

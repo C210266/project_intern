@@ -9,11 +9,12 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.util.Date;
 
-@Entity
+//@Entity
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+//Booking = CartItem
 public class Booking {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,14 +26,7 @@ public class Booking {
     private int quantity;
     private double totalPrice;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private Users users;
-
-    @ManyToOne
-    @JoinColumn(name = "location_id")
     private Location location;
 
-    @OneToOne(mappedBy = "booking")
-    private OrderItem orderItem;
+
 }

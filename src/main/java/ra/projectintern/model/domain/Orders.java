@@ -1,21 +1,20 @@
 package ra.projectintern.model.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 import javax.persistence.*;
-import java.util.HashSet;
+import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class OrderItem {
+public class Orders {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -23,14 +22,12 @@ public class OrderItem {
     private String email;
     private String phoneNumber;
     private double totalPrice;
+    @JsonFormat(pattern = "dd/MM/yyyy")
+    private Date order_at;
     private boolean status;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "orderItem")
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "orders")
     private List<Coupon> coupons;
-
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "booking_id", referencedColumnName = "id")
-    private Booking booking;
 
     // *
     @ManyToOne
